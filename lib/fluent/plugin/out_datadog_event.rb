@@ -5,7 +5,14 @@ module Fluent
     Fluent::Plugin.register_output('datadog_event', self)
 
     config_param :api_key, :string
-    config_param :app_key, :string
+    config_param :app_key, :string, :default => nil
+    config_param :date_happend, :string, :default => nil
+    config_param :priority, :string, :default => nil
+    config_param :host, :string, :default => nil
+    config_param :tags, :string, :default => nil
+    config_param :alert_type, :string, :default => nil
+    config_param :aggregation_key, :string, :default => nil
+    config_param :source_type_name, :string, :default => nil
 
     def configure(conf)
       super
@@ -41,7 +48,7 @@ module Fluent
       dog = Dogapi::Client.new(@api_key)
       dog.emit_event(Dogapi::Event.new("#{event}", :msg_title => "#{event_key}"))
       # for debug
-      puts "debug_out: #{@api_key} - #{event_key} - #{event}\n"
+      # puts "debug_out: #{@api_key} - #{event_key} - #{event}\n"
     end
 
   end
