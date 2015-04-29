@@ -1,8 +1,8 @@
 # Fluent::Plugin::OutDatadogEvent
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/fluent/plugin/out_datadog_event`. To experiment with that code, run `bin/console` for an interactive prompt.
+## About
 
-TODO: Delete this and the text above, and describe your gem
+fluent plugin for datadog event.
 
 ## Installation
 
@@ -22,7 +22,29 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### fluentd.conf example
+
+```
+<match dd.event.warn>
+  type datadog_event
+  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  alert_type warning
+  tags event,warn
+</match>
+
+<match dd.event.err>
+  type datadog_event
+  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  alert_type error
+  tags event,err
+</match>
+
+<match dd.event.*>
+  type datadog_event
+  api_key xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  tags event,info
+</match>
+```
 
 ## Development
 
