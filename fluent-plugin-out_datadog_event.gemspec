@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{fluentd output plugin for datadog event}
   spec.description   = %q{fluentd output plugin for datadog event}
-  spec.homepage      = "http://inokara.hateblo.jp/"
+  spec.homepage      = "https://github.com/inokappa/fluent-plugin-out_datadog_event"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
