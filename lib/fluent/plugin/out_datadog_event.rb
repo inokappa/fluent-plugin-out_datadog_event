@@ -2,7 +2,7 @@ require "dogapi"
 
 module Fluent
   class OutDatadogEvent < Fluent::Output
-    Fluent::Plugin.register_output('datadog_event', self)
+    Fluent::Plugin.register_output('out_datadog_event', self)
 
     config_param :api_key, :string
     config_param :app_key, :string, :default => nil
