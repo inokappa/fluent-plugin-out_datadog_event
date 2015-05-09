@@ -1,8 +1,14 @@
-require "dogapi"
-
 module Fluent
   class OutDatadogEvent < Fluent::Output
     Fluent::Plugin.register_output('out_datadog_event', self)
+
+    unless method_defined?(:log)
+      define_method("log") { $log }
+    end
+
+    unless method_defined?(:router)
+      define_method("router") { Fluent::Engine }
+    end
 
     config_param :api_key, :string
     config_param :app_key, :string, :default => nil
@@ -14,19 +20,21 @@ module Fluent
     config_param :aggregation_key, :string, :default => nil
     config_param :source_type_name, :string, :default => 'fluentd'
 
-    def configure(conf)
+    def initialize
       super
       #
+      require "dogapi"
     end
 
     def start
-      super
-      # ...
+      @dog = Dogapi::Client.new(@api_key, @app_key)
+      @finished = false
+      @thread = Thread.new(&method(:run))
     end
 
     def shutdown
-      super
-      # ...
+      @finished = true
+      @thread.join
     end
 
     def emit(tag, es, chain)
@@ -40,9 +48,7 @@ module Fluent
     end
 
     def post_event(event_key, event_msg)
-
-      dog = Dogapi::Client.new(@api_key)
-      res = dog.emit_event(Dogapi::Event.new(
+      res = @dog.emit_event(Dogapi::Event.new(
         "#{event_msg}", 
         :msg_title => "#{event_key}", 
         :date_happend => @date_happend,
@@ -54,7 +60,6 @@ module Fluent
         :source_type_name => @source_type_name
       ))
       # for debug
-      #puts "debug_out: #{@api_key} - #{event_key} - #{event_msg} - #{options} - #{@source_type_name} \n"
       #puts "debug_out: #{res}\n"
     end
 
