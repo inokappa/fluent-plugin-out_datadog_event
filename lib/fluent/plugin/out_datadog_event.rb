@@ -6,10 +6,6 @@ module Fluent
       define_method("log") { $log }
     end
 
-    unless method_defined?(:router)
-      define_method("router") { Fluent::Engine }
-    end
-
     config_param :api_key, :string
     config_param :app_key, :string, :default => nil
     config_param :date_happend, :string, :default => nil
@@ -29,7 +25,6 @@ module Fluent
     def start
       @dog = Dogapi::Client.new(@api_key, @app_key)
       @finished = false
-      @thread = Thread.new(&method(:run))
     end
 
     def shutdown
